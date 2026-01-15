@@ -1,0 +1,72 @@
+.bubble {
+  position: absolute;
+  border-radius: 50%;
+  opacity: 0.7;
+  animation: rise 10s infinite ease-in;
+  bottom: -50px;
+}
+
+.bubble.blue {
+  width: 40px;
+  height: 40px;
+  background-color: rgba(65, 105, 225, 0.6); /* Royal Blue */
+  left: 10%;
+  animation-duration: 8s;
+  animation-delay: 0s;
+}
+
+.bubble.green {
+  width: 60px;
+  height: 60px;
+  background-color: rgba(50, 205, 50, 0.6); /* Lime Green */
+  left: 50%;
+  animation-duration: 12s;
+  animation-delay: 2s;
+}
+
+.bubble.purple {
+  width: 30px;
+  height: 30px;
+  background-color: rgba(128, 0, 128, 0.6); /* Purple */
+  left: 80%;
+  animation-duration: 10s;
+  animation-delay: 4s;
+}
+
+/* Additional bubbles for more density if needed */
+.bubble:nth-child(4) {
+  width: 50px;
+  height: 50px;
+  background-color: rgba(65, 105, 225, 0.4);
+  left: 30%;
+  animation-duration: 11s;
+  animation-delay: 1s;
+}
+
+.bubble:nth-child(5) {
+  width: 35px;
+  height: 35px;
+  background-color: rgba(128, 0, 128, 0.4);
+  left: 70%;
+  animation-duration: 9s;
+  animation-delay: 3s;
+}
+
+@keyframes rise {
+  0% {
+    bottom: -100px;
+    transform: translateX(0);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.7;
+  }
+  50% {
+    transform: translateX(20px);
+  }
+  100% {
+    bottom: 110%; /* Go above the screen */
+    transform: translateX(-20px);
+    opacity: 0;
+  }
+}
