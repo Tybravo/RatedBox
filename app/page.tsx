@@ -1,8 +1,10 @@
 "use client";
 
-import { MapPin, Star, Info } from "lucide-react";
-import { useState } from "react";
+import { MapPin, Star } from "lucide-react";
+import { useState, useRef } from "react";
 import clsx from "clsx";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 // Dummy data for restrooms
 const RESTROOMS = [
@@ -11,10 +13,30 @@ const RESTROOMS = [
   { id: 3, lat: 70, left: 30, status: "Dirty", rating: 1, address: "Yaba Tech Junction", color: "text-red-500" },
   { id: 4, lat: 60, left: 80, status: "Clean", rating: 4, address: "Ikeja City Mall", color: "text-green-600" },
   { id: 5, lat: 30, left: 45, status: "Maintenance", rating: 0, address: "Oshodi Transport Interchange", color: "text-gray-500" },
+  // New mock locations
+  { id: 6, lat: 80, left: 15, status: "Clean", rating: 5, address: "MMIA Airport, Ikeja", color: "text-green-600" },
+  { id: 7, lat: 15, left: 75, status: "Clean", rating: 4, address: "Lekki Conservation Centre", color: "text-green-600" },
+  { id: 8, lat: 50, left: 90, status: "Average", rating: 3, address: "Ajah Market", color: "text-yellow-500" },
+  { id: 9, lat: 85, left: 65, status: "Dirty", rating: 2, address: "Mile 12 Market", color: "text-red-500" },
 ];
 
 export default function HomePage() {
   const [hoveredId, setHoveredId] = useState<number | null>(null);
+  const mapRef = useRef<HTMLDivElement>(null);
+  const router = useRouter();
+
+  const handleScroll = () => {
+    mapRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  const handleRateClick = () => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      router.push("/restrooms/rate");
+    } else {
+      router.push("/access-account");
+    }
+  };
 
   return (
     <section className="relative min-h-[calc(100vh-64px)] bg-white overflow-hidden flex flex-col">
@@ -41,18 +63,18 @@ export default function HomePage() {
             Help us maintain hygiene standards together.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-             <button className="btn-primary">
+             <button onClick={handleScroll} className="btn-primary">
                Find Restroom Near Me
              </button>
-             <button className="btn-purple">
+             <Link href="/restrooms/add" className="btn-purple">
                Add a Restroom
-             </button>
+             </Link>
           </div>
         </div>
 
         {/* Interactive Map Container */}
-        <div className="relative w-full max-w-5xl h-[400px] md:h-[500px] bg-blue-50/50 rounded-3xl border border-blue-100 shadow-inner overflow-hidden mx-auto mt-8">
-           <div className="absolute inset-0 flex items-center justify-center text-blue-200/20 font-bold text-9xl select-none pointer-events-none">
+        <div ref={mapRef} id="map-view" className="relative w-full max-w-5xl h-[400px] md:h-[500px] bg-blue-50/50 rounded-3xl border border-blue-100 shadow-inner mx-auto mt-8 z-20">
+           <div className="absolute inset-0 flex items-center justify-center text-blue-200/20 font-bold text-9xl select-none pointer-events-none overflow-hidden rounded-3xl">
               MAP VIEW
            </div>
 
@@ -92,13 +114,20 @@ export default function HomePage() {
                        ))}
                      </div>
                      <span className={clsx(
-                       "inline-block px-2 py-1 rounded-full text-xs font-semibold",
+                       "inline-block px-2 py-1 rounded-full text-xs font-semibold mb-3",
                        restroom.status === 'Clean' ? 'bg-green-100 text-green-700' :
                        restroom.status === 'Average' ? 'bg-yellow-100 text-yellow-700' :
                        restroom.status === 'Dirty' ? 'bg-red-100 text-red-700' : 'bg-gray-100 text-gray-700'
                      )}>
                        {restroom.status}
                      </span>
+                     
+                     <button 
+                      onClick={handleRateClick}
+                      className="w-full bg-accent-purple-deep hover:bg-purple-900 text-white text-xs font-bold py-2 rounded-lg transition-colors duration-300"
+                    >
+                      Rate
+                    </button>
                    </div>
                    {/* Tooltip Arrow */}
                    <div className="absolute top-full left-1/2 transform -translate-x-1/2 -mt-1 border-8 border-transparent border-t-white"></div>

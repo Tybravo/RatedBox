@@ -24,7 +24,7 @@ export default function Header() {
           </div>
 
           {/* Explore Menu (Right) */}
-          <div className="flex-shrink-0 w-32 md:w-48 flex justify-end">
+          <div className="flex-shrink-0 flex justify-end">
             <ExploreMenu />
           </div>
         </div>
